@@ -124,7 +124,13 @@ function Encoder() {}
  */
 
 Encoder.prototype.encode = function(obj, callback){
-  if ((obj.type === exports.EVENT || obj.type === exports.ACK) && hasBin(obj.data)) {
+  var runBinaryCheck = true;
+
+  if (obj.flags) {
+     runBinaryCheck = obj.flags.hasBinary || true;
+  }
+
+  if ((obj.type === exports.EVENT || obj.type === exports.ACK) && runBinaryCheck && hasBin(obj.data)) {
     obj.type = obj.type === exports.EVENT ? exports.BINARY_EVENT : exports.BINARY_ACK;
   }
 
